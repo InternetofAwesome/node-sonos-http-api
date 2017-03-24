@@ -19,7 +19,9 @@
     "fuse.js": "^2.5.0",
     "json5": "^0.5.1",
     "node-static": "~0.7.0",
+    "request": "^2.81.0",
     "request-promise": "~1.0.2",
+    "shuffle-array": "^1.0.1",
     "shufflejs": "^4.1.1",
     "sonos-discovery": "https://github.com/jishi/node-sonos-discovery/archive/v1.4.1.tar.gz",
     "valid-url": "^1.0.9"

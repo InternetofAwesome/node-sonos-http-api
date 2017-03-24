@@ -107,18 +107,18 @@ const min_time = 10
 const max_time = 30
 var files = fs.readdirSync('./static/clips')
 var shuffledFiles = [];
-const volume = 20
+const volume = 22
 
 function play(){
   var file = shuffledFiles.pop()
   console.log("playing", file)
 
-  request("http://localhost:5005/3rd%20Floor/clip/" + file + "/" + volume, function(err, res, body){
-    // request("http://localhost:5005/2nd Floor/clip/" + file + "/" + volume, function(err, res, body){
-      // request("http://localhost:5005/Innovation Lab/clip/" + file + "/" + volume, function(err, res, body){
+  request("http://localhost:5005/3rd Floor/clip/" + file + "/" + volume, function(err, res, body){
+     request("http://localhost:5005/2nd Floor/clip/" + file + "/" + volume, function(err, res, body){
+       request("http://localhost:5005/Innovation Lab/clip/" + file + "/" + volume, function(err, res, body){
         setTimer()
-      // })
-    // })
+       })
+     })
   })
 }
 
