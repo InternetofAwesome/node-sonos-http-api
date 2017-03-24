@@ -8,6 +8,11 @@ const logger = require('sonos-discovery/lib/helpers/logger');
 const SonosHttpAPI = require('./lib/sonos-http-api.js');
 const nodeStatic = require('node-static');
 const settings = require('./settings');
+const shuffle = require('shuffle-array');
+const request = require('request')
+const dateMath = require('date-arithmetic')
+const dateFormat = require('dateformat');
+
 
 const fileServer = new nodeStatic.Server(settings.webroot);
 const discovery = new SonosSystem(settings);
@@ -97,3 +102,39 @@ server.on('error', (err) => {
 });
 
 
+//in minutes
+const min_time = 10
+const max_time = 30
+var files = fs.readdirSync('./static/clips')
+var shuffledFiles = [];
+const volume = 20
+
+function play(){
+  var file = shuffledFiles.pop()
+  console.log("playing", file)
+
+  request("http://localhost:5005/3rd%20Floor/clip/" + file + "/" + volume, function(err, res, body){
+    // request("http://localhost:5005/2nd Floor/clip/" + file + "/" + volume, function(err, res, body){
+      // request("http://localhost:5005/Innovation Lab/clip/" + file + "/" + volume, function(err, res, body){
+        setTimer()
+      // })
+    // })
+  })
+}
+
+function setTimer(){
+  var t = (min_time + (max_time-min_time)*Math.random())*60*1000
+  var date = new Date()
+  if(shuffledFiles.length == 0) {
+    console.log("shufffling file")
+    shuffledFiles = files;
+    shuffle(shuffledFiles);
+  }
+  date = dateMath.add(date, t/1000, 'seconds')
+  console.log("Scheduled", shuffledFiles[shuffledFiles.length-1], 'at', dateFormat(date, "dddd, mmmm dS, yyyy, h:MM:ss TT"))
+  setTimeout(play, t)
+}
+
+setTimer()
+
+// setTimeout(play, 1000)
