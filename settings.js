@@ -20,7 +20,8 @@ var settings = {
   cacheDir: path.resolve(__dirname, 'cache'),
   webroot: path.resolve(__dirname, 'static'),
   presetDir: path.resolve(__dirname, 'presets'),
-  announceVolume: 40
+  announceVolume: 40,
+  rooms: ['3rd Floor']
 };
 
 // load user settings

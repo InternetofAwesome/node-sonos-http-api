@@ -11,6 +11,7 @@
     "url": "https://github.com/jishi/node-sonos-http-api.git"
   },
   "dependencies": {
+    "Q": "0.0.1",
     "anesidora": "^1.2.0",
     "aws-sdk": "^2.12.0",
     "basic-auth": "~1.1.0",
@@ -19,6 +20,7 @@
     "fuse.js": "^2.5.0",
     "json5": "^0.5.1",
     "node-static": "~0.7.0",
+    "q": "^1.5.0",
     "request": "^2.81.0",
     "request-promise": "~1.0.2",
     "shuffle-array": "^1.0.1",

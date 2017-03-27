@@ -12,6 +12,7 @@ const shuffle = require('shuffle-array');
 const request = require('request')
 const dateMath = require('date-arithmetic')
 const dateFormat = require('dateformat');
+const Q = require('q')
 
 
 const fileServer = new nodeStatic.Server(settings.webroot);
@@ -107,19 +108,31 @@ const min_time = 10
 const max_time = 30
 var files = fs.readdirSync('./static/clips')
 var shuffledFiles = [];
-const volume = 22
+const volume = 1
 
 function play(){
   var file = shuffledFiles.pop()
   console.log("playing", file)
+  console.log("rooms", settings.rooms)
 
-  request("http://localhost:5005/3rd Floor/clip/" + file + "/" + volume, function(err, res, body){
-     request("http://localhost:5005/2nd Floor/clip/" + file + "/" + volume, function(err, res, body){
-       request("http://localhost:5005/Innovation Lab/clip/" + file + "/" + volume, function(err, res, body){
-        setTimer()
-       })
-     })
+  var p = settings.rooms.map(function(r){
+    var q = Q.defer()
+    var uri = "http://localhost:5005/" + r + "/clip/" + file + "/" + volume;
+    console.log(uri)
+    request(uri, function(err, res, body){
+      if(err)
+        q.reject()
+      else {
+        console.log(body)
+        q.resolve();
+      }
+    })
+    return q.promise
   })
+
+  Q.allSettled(p).then(function(){
+    console.log('all done')
+  }).done()
 }
 
 function setTimer(){
@@ -137,4 +150,4 @@ function setTimer(){
 
 setTimer()
 
-// setTimeout(play, 1000)
+setTimeout(play, 1000)
