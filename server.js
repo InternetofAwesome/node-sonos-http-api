@@ -3,6 +3,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const auth = require('basic-auth');
+const singlePlayerAnnouncement = require('./lib/helpers/single-player-announcement');
 const SonosSystem = require('sonos-discovery');
 const logger = require('sonos-discovery/lib/helpers/logger');
 const SonosHttpAPI = require('./lib/sonos-http-api.js');
@@ -13,6 +14,8 @@ const request = require('request')
 const dateMath = require('date-arithmetic')
 const dateFormat = require('dateformat');
 const Q = require('q')
+const exec = require('child_process').exec;
+
 
 
 const fileServer = new nodeStatic.Server(settings.webroot);
@@ -117,21 +120,20 @@ function play(){
 
   var p = settings.rooms.map(function(r){
     var q = Q.defer()
+    file=escape(file)
+    r=escape(r)
     var uri = "http://localhost:5005/" + r + "/clip/" + file + "/" + volume;
-    console.log(uri)
-    request(uri, function(err, res, body){
-      if(err)
+    exec("curl " + uri, function (error, stdout, stderr) {
+      if(error)
         q.reject()
-      else {
-        console.log(body)
-        q.resolve();
-      }
-    })
+      else
+        q.resolve()
+    });
     return q.promise
   })
 
   Q.allSettled(p).then(function(){
-    console.log('all done')
+    setTimer()
   }).done()
 }
 
