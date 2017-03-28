@@ -146,10 +146,16 @@ function setTimer(){
     shuffle(shuffledFiles);
   }
   date = dateMath.add(date, t/1000, 'seconds')
+  var now = new Date()
+  if(date>now.setHours(settings.end_hour)){
+    date = dateMath.add(new Date(), 1, 'day')
+    date.setHours(settings.start_hour)
+    date = dateMath.add(date, t/1000, 'seconds')
+  }
   console.log("Scheduled", shuffledFiles[shuffledFiles.length-1], 'at', dateFormat(date, "dddd, mmmm dS, yyyy, h:MM:ss TT"))
   setTimeout(play, t)
 }
 
 setTimer()
 
-setTimeout(play, 1000)
+// setTimeout(play, 2000)
