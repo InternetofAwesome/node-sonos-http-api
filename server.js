@@ -111,7 +111,7 @@ const min_time = 10
 const max_time = 30
 var files = fs.readdirSync('./static/clips')
 var shuffledFiles = [];
-const volume = 1
+const volume = 30
 
 function play(){
   var file = shuffledFiles.pop()
@@ -123,6 +123,7 @@ function play(){
     file=escape(file)
     r=escape(r)
     var uri = "http://localhost:5005/" + r + "/clip/" + file + "/" + volume;
+
     exec("curl " + uri, function (error, stdout, stderr) {
       if(error)
         q.reject()
@@ -142,7 +143,8 @@ function setTimer(){
   var date = new Date()
   if(shuffledFiles.length == 0) {
     console.log("shufffling file")
-    shuffledFiles = files;
+    //least intuitive way to do a deep copy of an array
+    shuffledFiles = files.slice();
     shuffle(shuffledFiles);
   }
   date = dateMath.add(date, t/1000, 'seconds')

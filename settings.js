@@ -21,7 +21,7 @@ var settings = {
   webroot: path.resolve(__dirname, 'static'),
   presetDir: path.resolve(__dirname, 'presets'),
   announceVolume: 40,
-  rooms: ['3rd Floor'],
+  rooms: ['3rd Floor', '2nd Floor', 'Innovation Lab'],
   start_hour: 9,
   end_hour: 17
 };
